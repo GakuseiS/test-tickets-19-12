@@ -1,4 +1,4 @@
-export const resData = {
+export const ticketsData = {
   tickets: [
     {
       origin: "VVO",

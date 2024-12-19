@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
-import { resData } from "../../state/tickets";
+import { ticketsData } from "../../state/tickets";
 import { TTicket } from "../../state/tickets.type";
 
 export const useFilters = () => {
-  const [tickets, setTickets] = useState<TTicket[]>(resData.tickets.sort((a, b) => a.price - b.price));
+  const [tickets, setTickets] = useState<TTicket[]>(ticketsData.tickets.sort((a, b) => a.price - b.price));
   const [selectedFilters, setSelectedFilters] = useState<number[]>([]);
   const [isTotalSelected, setTotalSelected] = useState<boolean>(true);
 
@@ -13,17 +13,17 @@ export const useFilters = () => {
       getFilteredData(selectedFilters);
     } else {
       setTotalSelected(true);
-      setTickets(resData.tickets);
+      setTickets(ticketsData.tickets);
     }
   }, [selectedFilters, isTotalSelected]);
 
-  const onAllClick = () => {
+  const onTotalClick = () => {
     setTotalSelected(true);
     setSelectedFilters([]);
-    setTickets(resData.tickets);
+    setTickets(ticketsData.tickets);
   };
 
-  const onOnlyOneClick = (id: number) => {
+  const onOnlyClick = (id: number) => {
     setSelectedFilters([id]);
     setTotalSelected(false);
   };
@@ -41,16 +41,16 @@ export const useFilters = () => {
   };
 
   const getFilteredData = (filters: number[]) => {
-    const temp = resData?.tickets?.filter((ticket) => filters.includes(ticket.stops));
+    const temp = ticketsData?.tickets?.filter((ticket) => filters.includes(ticket.stops));
     setTickets(temp);
   };
 
   return {
     tickets,
-    isAll: isTotalSelected,
+    isTotalSelected,
     selectedFilters,
-    onAllClick,
-    onOnlyOneClick,
+    onTotalClick,
+    onOnlyClick,
     onFilterChoose,
   };
 };
