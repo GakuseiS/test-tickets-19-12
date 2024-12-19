@@ -1,0 +1,20 @@
+.container {
+    &:hover {
+        .only {
+            display: flex;
+        }
+    }
+
+    .only {
+        position   : absolute;
+        cursor     : pointer;
+        top        : 7px;
+        right      : 8px;
+        font-size  : 13px;
+        font-weight: 500;
+        color      : var(--middle-blue);
+        display    : none;
+        height     : 20px;
+        margin     : auto;
+    }
+}

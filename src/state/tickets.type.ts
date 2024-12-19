@@ -1,4 +1,4 @@
-export type TData = {
+export type TTicket = {
   origin: string;
   origin_name: string;
   destination: string;

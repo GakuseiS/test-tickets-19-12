@@ -1,1 +1,0 @@
-export { FiltersPage } from "./filters";

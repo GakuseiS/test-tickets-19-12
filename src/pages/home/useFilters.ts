@@ -1,21 +1,31 @@
 import { useState, useEffect } from "react";
 import { resData } from "../../state/tickets";
-import { TData } from "../../state/tickets.type";
+import { TTicket } from "../../state/tickets.type";
 
 export const useFilters = () => {
-  const [tickets, setTickets] = useState<TData[]>();
+  const [tickets, setTickets] = useState<TTicket[]>(resData.tickets.sort((a, b) => a.price - b.price));
   const [selectedFilters, setSelectedFilters] = useState<number[]>([]);
-  const [isAll, setIsAll] = useState(true);
+  const [isTotalSelected, setTotalSelected] = useState<boolean>(true);
+
+  useEffect(() => {
+    if (isTotalSelected) return;
+    if (selectedFilters.length) {
+      getFilteredData(selectedFilters);
+    } else {
+      setTotalSelected(true);
+      setTickets(resData.tickets);
+    }
+  }, [selectedFilters, isTotalSelected]);
 
   const onAllClick = () => {
-    setIsAll(true);
+    setTotalSelected(true);
     setSelectedFilters([]);
     setTickets(resData.tickets);
   };
 
   const onOnlyOneClick = (id: number) => {
     setSelectedFilters([id]);
-    setIsAll(false);
+    setTotalSelected(false);
   };
 
   const onFilterChoose = (id: number) => {
@@ -26,35 +36,18 @@ export const useFilters = () => {
     } else {
       tempArray.push(id);
     }
-    setIsAll(false);
+    setTotalSelected(false);
     setSelectedFilters([...tempArray]);
   };
 
   const getFilteredData = (filters: number[]) => {
-    const temp = resData?.tickets?.filter((ticket) =>
-      filters.includes(ticket.stops)
-    );
+    const temp = resData?.tickets?.filter((ticket) => filters.includes(ticket.stops));
     setTickets(temp);
   };
 
-  useEffect(() => {
-    setTickets(resData.tickets.sort((a, b) => a.price - b.price));
-  }, []);
-
-  useEffect(() => {
-    if (!isAll) {
-      if (selectedFilters.length) {
-        getFilteredData(selectedFilters);
-      } else {
-        setIsAll(true);
-        setTickets(resData.tickets);
-      }
-    }
-  }, [selectedFilters, isAll]);
-
   return {
     tickets,
-    isAll,
+    isAll: isTotalSelected,
     selectedFilters,
     onAllClick,
     onOnlyOneClick,
